@@ -61,6 +61,8 @@ with tab2:
     m = f.groupby(["month", "city"])[metric].mean().reset_index()
     fig = px.line(m, x="month", y=metric, color="city", markers=True,
                   title=f"Monthly mean {metric_label}")
+    fig.update_xaxes(dtick=1, tickvals=list(range(1,13)),
+       ticktext=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"])
     fig.update_xaxes(dtick=1)
     st.plotly_chart(fig, width="stretch")
     st.info("Switch the pollutant in the sidebar: PM2.5 peaks in winter (smog), "
@@ -78,7 +80,7 @@ with tab3:
 
 with tab4:
     s = base.groupby("city")[["pm2_5_mean", "pm10_mean"]].mean().reset_index()
-    fig = px.scatter(s, x="pm2_5_mean", y="pm10_mean", hover_name="city", text="city",
+    fig = px.scatter(s, x="pm2_5_mean", y="pm10_mean", hover_name="city",
                      title="City averages: fine (PM2.5) vs coarse (PM10) particles")
     fig.update_traces(textposition="top center")
     st.plotly_chart(fig, width="stretch")
@@ -86,10 +88,10 @@ with tab4:
 
 with tab5:
     g = base.groupby(["city", "lat", "lon"])[metric].mean().reset_index()
-    fig = px.scatter_geo(g, lat="lat", lon="lon", size=metric, color=metric,
+    fig = px.scatter_geo(g, lat="lat", lon="lon", size=metric, height=600, color=metric,
                          hover_name="city", color_continuous_scale="YlOrRd",
                          title=f"Mean {metric_label} by city")
     fig.update_geos(scope="asia", center=dict(lat=22, lon=80),
-                    projection_scale=3.2, showcountries=True, showland=True)
+                    projection_scale=4, showcountries=True, showland=True)
     st.plotly_chart(fig, width="stretch")
   
